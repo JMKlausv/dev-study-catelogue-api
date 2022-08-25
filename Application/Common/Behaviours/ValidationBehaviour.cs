@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using ValidationException = Application.Common.Exceptions.ValidationException;
 
 
@@ -8,9 +9,12 @@ namespace Application.Common.Behaviours;
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
-    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
+    private readonly ILogger<ValidationBehaviour<TRequest, TResponse>> _logger;
+
+    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators , ILogger<ValidationBehaviour<TRequest, TResponse>> logger)
     {
         _validators = validators;
+       _logger = logger;
     }
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
@@ -20,6 +24,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
                                   .SelectMany(result => result.Errors)
                                   .Where(f => f != null)
                                   .ToList();
+        _logger.LogError("what is happening error-----n " + string.Join("::", failures));
         if (failures.Count != 0)
             throw new ValidationException(failures);
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Exceptions
 {
-    internal class ValidationException : Exception
+    public class ValidationException : Exception
     {
         public ValidationException()
             : base("One or more validation failures have occurred.")
@@ -24,5 +24,6 @@ namespace Application.Common.Exceptions
         }
 
         public IDictionary<string, string[]> Errors { get; }
+
     }
 }

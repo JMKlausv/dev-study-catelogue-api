@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Languages.Commands.CreateLanguageEvent
+namespace Application.Languages.Commands.CreateLanguage
 {
     public class CreateLanguageCommand: IRequest<int>
     {

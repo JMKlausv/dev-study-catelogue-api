@@ -20,7 +20,9 @@ namespace Application.Languages.Queries.GetAllLanguages
         }
         public  async Task<IEnumerable<LanguageDto>> Handle(GetAllLanguagesQuery request, CancellationToken cancellationToken)
         {
-            return  _context.Languages.ProjectTo<LanguageDto>(_mapper.ConfigurationProvider).ToList();
+            return  _context.Languages
+                .ProjectTo<LanguageDto>(_mapper.ConfigurationProvider)
+                .ToList();
         }
     }
 }
