@@ -1,6 +1,8 @@
 ﻿using Application.Common.Exceptions;
 using dev_study_catelogue_api.Extensions;
 using dev_study_catelogue_api.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.Net;
 using System.Text.Json;
 
@@ -38,13 +40,20 @@ namespace dev_study_catelogue_api.Middlewares
                 _ => (int)HttpStatusCode.InternalServerError,
             };
             var message = exception.Message;
-            if (exception.Data != null)
+            ValidationException ex;
+            if( exception is ValidationException)
             {
-                var data = exception.Data as IDictionary<string, string[]>;
-                message = exception.Message + " .. " + data?.ToDictString();
+                ex = exception as ValidationException;
 
+             if(ex!= null)
+                {
+                    var values = ex.Errors.Values.First();
+                    var msg = String.Join(" , ", values);
+                    message = exception.Message +"::"+ msg;
+                }
+               
             }
-
+            
 
             await context.Response.WriteAsync(new ErrorDetails()
             {

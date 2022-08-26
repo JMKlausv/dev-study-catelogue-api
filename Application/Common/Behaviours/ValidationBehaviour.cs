@@ -24,8 +24,8 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
                                   .SelectMany(result => result.Errors)
                                   .Where(f => f != null)
                                   .ToList();
-        _logger.LogError("what is happening error-----n " + string.Join("::", failures));
         if (failures.Count != 0)
+           
             throw new ValidationException(failures);
 
         return await next();

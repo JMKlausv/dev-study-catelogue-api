@@ -1,9 +1,4 @@
 ﻿using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Common.Exceptions
 {
@@ -18,6 +13,7 @@ namespace Application.Common.Exceptions
         public ValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {
+            System.Diagnostics.Debug.WriteLine("this is validation exception ctor ......." + String.Join("::",failures));
             Errors = failures
                 .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
                 .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
