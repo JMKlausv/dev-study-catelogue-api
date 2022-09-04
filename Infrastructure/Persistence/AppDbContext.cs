@@ -1,8 +1,11 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
 using Infrastructure.Common.Extensions;
+using Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext , IAppDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         private readonly IMediator _mediator;
 
@@ -26,7 +29,8 @@ namespace Infrastructure.Persistence
 
         public DbSet<Language> Languages => Set<Language>();
         public DbSet<Framework> Frameworks => Set<Framework>(); 
-        public DbSet<Course> Courses => Set<Course>();  
+        public DbSet<Course> Courses => Set<Course>();
+        public DatabaseFacade database => Database;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

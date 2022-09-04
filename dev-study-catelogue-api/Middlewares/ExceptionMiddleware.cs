@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.common.Exceptions;
+using Application.Common.Exceptions;
 using dev_study_catelogue_api.Extensions;
 using dev_study_catelogue_api.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -37,6 +38,8 @@ namespace dev_study_catelogue_api.Middlewares
             {
                 ValidationException => (int)HttpStatusCode.BadRequest,
                 NotFoundException => (int)HttpStatusCode.NotFound,
+                AuthenticationException => (int)HttpStatusCode.Unauthorized,
+                CantCreateUserException => (int)HttpStatusCode.BadRequest,    
                 _ => (int)HttpStatusCode.InternalServerError,
             };
             var message = exception.Message;

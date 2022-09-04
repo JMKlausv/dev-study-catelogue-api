@@ -1,5 +1,6 @@
 ﻿using Application.Languages.Commands.CreateLanguage;
 using Application.Languages.Commands.DeleteLanguage;
+using Application.Languages.Commands.UpdateLanguage;
 using Application.Languages.Queries.GetAllLanguages;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,16 @@ namespace dev_study_catelogue_api.Controllers
         {
             return  Ok( await Mediator.Send(command));
         }
- /*
+ 
         // PUT api/<LanguageController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateLanguageCommand command)
         {
+            command.Id = id;
+            int result = await Mediator.Send(command);  
+            return Ok(result);    
         }
- */
+ 
 
         // DELETE api/<LanguageController>/5
         [HttpDelete("{id}")]

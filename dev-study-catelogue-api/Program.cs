@@ -1,5 +1,6 @@
 
 using dev_study_catelogue_api.Extensions;
+using Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var initialiser = scope.ServiceProvider.GetRequiredService <AppDbContextInitializer>();
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
 }
 app.ConfigureCustomExceptionMiddleware();
 app.UseCors(x => x
@@ -29,6 +37,8 @@ app.UseCors(x => x
            .AllowAnyHeader());
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
