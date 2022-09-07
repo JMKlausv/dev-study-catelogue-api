@@ -61,7 +61,7 @@ namespace dev_study_catelogue_api.Middlewares
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = message
+                Message = exception.InnerException!.Message
             }.ToString()) ;
         }
     }

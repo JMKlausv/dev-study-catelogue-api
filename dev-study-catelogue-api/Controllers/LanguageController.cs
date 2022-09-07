@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dev_study_catelogue_api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class LanguageController : ApiControllerBase
     {
         // GET: api/<LanguageController>

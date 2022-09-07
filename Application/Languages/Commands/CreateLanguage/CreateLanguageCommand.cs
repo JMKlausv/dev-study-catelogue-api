@@ -2,11 +2,7 @@
 using Domain.Entities;
 using Domain.Events;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Application.Languages.Commands.CreateLanguage
 {
@@ -24,15 +20,39 @@ namespace Application.Languages.Commands.CreateLanguage
         }
         public async Task<int> Handle(CreateLanguageCommand request, CancellationToken cancellationToken)
         {
-            var language = new Language
+          using(IDbContextTransaction transaction = _context.database.BeginTransaction())
             {
-                Name = request.Name
-            };
-            language.AddDomainEvent(new LanguageCreatedEvent(language));
-            _context.Languages.Add(language); 
-            
-           await  _context.SaveChangesAsync(cancellationToken);
-            return language.Id;
+                try
+                {
+                    var language = new Language
+                    {
+                        Name = request.Name
+                    };
+                    language.AddDomainEvent(new LanguageCreatedEvent(language));
+                    _context.Languages.Add(language);
+
+                    await _context.SaveChangesAsync(cancellationToken);
+                    var pureFrameWork = new Framework
+                    {
+                        Name = "pure " + language.Name,
+                        Type = "pure",
+                        LanguageId = language.Id,
+                    };
+                    _context.Frameworks.Add(pureFrameWork);
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    transaction.Commit();
+
+                    return language.Id;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+
+
+            }
         }
     }
 }
