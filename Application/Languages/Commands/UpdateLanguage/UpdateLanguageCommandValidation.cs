@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Frameworks.Commands.UpdateFramework;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,13 +18,19 @@ namespace Application.Languages.Commands.UpdateLanguage
     {
         _context = context;
 
+        RuleFor(l => l)
+            .Must(HaveUniqueName)
+            .WithMessage("name must be unique");
         RuleFor(l => l.Name)
-            .NotEmpty().Must(beUnique).WithMessage("name must be unique");
+                .NotNull();
+
 
     }
-    private bool beUnique(string name)
-    {
-        return !(_context.Languages.Any(l => l.Name == name));
+        private bool HaveUniqueName(UpdateLanguageCommand editedLanguage)
+        {
+            return _context.Languages
+                .All(language => language.Id.Equals(editedLanguage.Id)
+                || language.Name != editedLanguage.Name);
+        }
     }
-}
 }

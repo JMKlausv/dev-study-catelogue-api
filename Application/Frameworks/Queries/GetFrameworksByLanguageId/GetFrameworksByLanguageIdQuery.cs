@@ -34,7 +34,7 @@ namespace Application.Frameworks.Queries.GetFrameworksByLanguageId
             }
             return  _context.Frameworks
                 .ProjectTo<FrameworkDto>(_mapper.ConfigurationProvider)
-                .Where(f => f.LanguageId == request.LanguageId
+                .Where(f => f.Language.Id== request.LanguageId
           );
         }
     }

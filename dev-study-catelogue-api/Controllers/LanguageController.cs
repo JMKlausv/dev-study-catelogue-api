@@ -3,13 +3,14 @@ using Application.Languages.Commands.DeleteLanguage;
 using Application.Languages.Commands.UpdateLanguage;
 using Application.Languages.Queries.GetAllLanguages;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace dev_study_catelogue_api.Controllers
 {
-   
+    [Authorize]
     public class LanguageController : ApiControllerBase
     {
         // GET: api/<LanguageController>

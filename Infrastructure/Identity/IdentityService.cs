@@ -88,7 +88,8 @@ namespace Infrastructure.Identity
             {
 
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-               new Claim(ClaimTypes.Email, user.Email)
+               new Claim(ClaimTypes.Email, user.Email),
+               new Claim(ClaimTypes.Name,user.UserName)
            };
             foreach (var userRole in userRoles)
             {

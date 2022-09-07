@@ -27,6 +27,7 @@ namespace Application.Frameworks.Queries.GetAllFrameworks
         public async Task<IEnumerable<FrameworkDto>> Handle(GetAllFrameworksQuery request, CancellationToken cancellationToken)
         {
             return  _context.Frameworks
+                .Include(f=>f.language)
                 .ProjectTo<FrameworkDto>(_mapper.ConfigurationProvider)
                 .ToList();
         }
