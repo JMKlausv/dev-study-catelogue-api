@@ -7,7 +7,7 @@ namespace Domain.Entities
         public string Title { get; set; }    
         public string AuthorName { get; set; }
         public string Description { get; set; }
-        public string? ImageUrl { get; set; }    
+        public string ImageUrl { get; set; }    
         public string ContentLink { get; set; }
         public DateTime PublishedDate { get; set; }
         public Framework Framework { get; set; }
@@ -16,7 +16,7 @@ namespace Domain.Entities
         public string PlatformType { get; set; }    
         public int UpvoteCount { get; set; } = 0;   
         public int DownvoteCount { get; set; }  = 0;  
-        public int UploadedBy { get; set; }  
+        public string UploadedBy { get; set; }  
         public string Division { get; set; } 
 
 

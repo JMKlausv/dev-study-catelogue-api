@@ -3,7 +3,7 @@ using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.Courses.Commands.CreateCourseCommand
+namespace Application.Courses.Commands.CreateCourse
 {
     public record CreateCourseCommand : IRequest<int>
     {
@@ -16,7 +16,7 @@ namespace Application.Courses.Commands.CreateCourseCommand
         public int FrameworkId { get; init; }
         public string Difficulty { get; init; }
         public string PlatformType { get; init; }
-        public int UploadedBy { get; init; }
+        public string UploadedBy { get; init; }
         public string Division { get; init; }
 
     }
@@ -41,7 +41,8 @@ namespace Application.Courses.Commands.CreateCourseCommand
                 Difficulty = request.Difficulty,
                 PlatformType = request.PlatformType,
                 UploadedBy = request.UploadedBy,    
-                Division = request.Division,     
+                Division = request.Division,  
+                FrameworkId = request.FrameworkId,
             };
             await _context.Courses.AddAsync(course);
             await _context.SaveChangesAsync(cancellationToken);

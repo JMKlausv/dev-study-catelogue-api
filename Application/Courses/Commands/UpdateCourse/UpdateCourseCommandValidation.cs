@@ -1,18 +1,13 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Courses.Commands.CreateCourseCommand
+namespace Application.Courses.Commands.UpdateCourse
 {
-    public class CreateCourseCommandValidation : AbstractValidator<CreateCourseCommand> 
+    public class UpdateCourseCommandValidation : AbstractValidator<UpdateCourseCommand>
     {
-        public CreateCourseCommandValidation()
+        public UpdateCourseCommandValidation()
         {
             RuleFor(c => c.Title)
-                .NotNull();
+               .NotNull();
             RuleFor(c => c.AuthorName)
                .NotNull();
             RuleFor(c => c.Difficulty)
