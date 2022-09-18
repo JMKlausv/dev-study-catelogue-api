@@ -8,11 +8,11 @@ namespace Application.Courses.Commands.CreateCourse
     public record CreateCourseCommand : IRequest<int>
     {
         public string Title { get; init; }
-        public string AuthorName { get; init; }
-        public string Description { get; init; }
+        public string? AuthorName { get; init; }
+        public string? Description { get; init; }
         public string? ImageUrl { get; init; }
         public string ContentLink { get; init; }
-        public DateTime PublishedDate { get; init; }
+        public DateTime? PublishedDate { get; init; }
         public int FrameworkId { get; init; }
         public string Difficulty { get; init; }
         public string PlatformType { get; init; }
