@@ -6,6 +6,7 @@ namespace Application.Common.Interfaces
     {
         Task<(Result result, string tokenString)> AuthenticateUserAsync(string userName, string email, string password);
         Task<string> GetUserNameAsync(string userId);
+        Task<string> GetAdminId();
         Task<(Result result, string userId)> CreateUserAsync(string userName, string email, string password);
     }
 }

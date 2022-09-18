@@ -12,7 +12,7 @@ namespace Application.Courses.Queries.GetAllCourses
         public string ImageUrl { get; set; }
         public string ContentLink { get; set; }
         public DateTime PublishedDate { get; set; }
-        public int FrameworkId { get; set; }
+        public CourseFrameworkDto Framework { get; set; }
         public string Difficulty { get; set; }
         public string PlatformType { get; set; }
         public int UpvoteCount { get; set; } = 0;

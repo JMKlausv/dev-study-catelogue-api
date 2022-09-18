@@ -13,15 +13,9 @@ namespace Application.Courses.Commands.CreateCourse
         {
             RuleFor(c => c.Title)
                 .NotNull();
-            RuleFor(c => c.AuthorName)
-               .NotNull();
             RuleFor(c => c.Difficulty)
                .NotNull();
-            RuleFor(c => c.PublishedDate)
-               .NotNull();
             RuleFor(c => c.ContentLink)
-               .NotNull();
-            RuleFor(c => c.Description)
                .NotNull();
             RuleFor(c => c.PlatformType)
                .NotNull();

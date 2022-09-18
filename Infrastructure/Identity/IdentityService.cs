@@ -79,7 +79,11 @@ namespace Infrastructure.Identity
             return (result.ToApplicationResult(), user.Id);
         }
 
-
+        public async Task<string> GetAdminId()
+        {
+            var admins = await _userManager.GetUsersInRoleAsync("admin");
+            return admins.First().Id;
+        }
         private async Task<string> generateToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);

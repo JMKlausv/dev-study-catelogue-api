@@ -2,9 +2,12 @@
 using Application.Courses.Commands.DeleteCourse;
 using Application.Courses.Commands.UpdateCourse;
 using Application.Courses.Queries.GetAllCourses;
+using Application.Courses.Queries.GetAllCoursesCount;
 using Application.Courses.Queries.GetCourseByDifficulty;
 using Application.Courses.Queries.GetCourseByFrameworkId;
 using Application.Courses.Queries.GetCourseById;
+using Application.Courses.Queries.GetUserCourseCount;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,13 +21,18 @@ namespace dev_study_catelogue_api.Controllers
 
         // GET: api/<CourseController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string? frameworkId , [FromQuery] string? difficulty)
+        public async Task<IActionResult> Get([FromQuery] string? frameworkId , [FromQuery] string? difficulty , [FromQuery] string? maxCount , [FromQuery] string? UploadedByUser , [FromQuery] string? userDivision)
         {
-            if(frameworkId != null)
+            System.Diagnostics.Debug.WriteLine(UploadedByUser);
+            if (frameworkId != null)
             {
                 var query = new GetCourseByFrameworkIdQuery()
                 {
-                    FrameworkId = int.Parse(frameworkId)
+                    FrameworkId = int.Parse(frameworkId),
+                    MaxCount = maxCount != null ? int.Parse(maxCount) : null,
+                    UploadedByUser = UploadedByUser,
+                    userDivision = userDivision
+
                 };
                 var result1 = await Mediator.Send(query);
                 return Ok(result1); 
@@ -34,14 +42,25 @@ namespace dev_study_catelogue_api.Controllers
             {
                 var query = new GetCourseByDifficultyQuery()
                 {
-                    Difficulty = difficulty
+                    Difficulty = difficulty,
+                    MaxCount = maxCount != null ? int.Parse(maxCount) : null,
+                    UploadedByUser = UploadedByUser ,
+                    UserDivision = userDivision 
+
                 };
                 var result1 = await Mediator.Send(query);
                 return Ok(result1);
 
             }
+            var queryDefault = new GetAllCoursesQuery()
+            {
+              
+                MaxCount = maxCount != null ? int.Parse(maxCount) : null,
+                UploadedByUser =UploadedByUser,
+                UserDivision = userDivision 
 
-            var result =  await Mediator.Send(new GetAllCoursesQuery());
+            };
+            var result =  await Mediator.Send(queryDefault);
             return Ok(result);  
 
         }
@@ -57,6 +76,30 @@ namespace dev_study_catelogue_api.Controllers
                 Id = id,
             };
             var result = await Mediator.Send(query);    
+            return Ok(result);
+        }
+
+        //GET api/CourseController>/Count
+        [HttpGet()]
+        [Route("count")]
+        public async Task<IActionResult> GetCourseCount([FromQuery] string? userDivision)
+        {
+            int result;
+            if(userDivision == null)
+            {
+               var query = new GetAllCourseCountQuery();
+
+                result = await Mediator.Send(query);
+            }
+            else
+            {
+                var query = new GetUserCourseCountQuery();
+
+                result = await Mediator.Send(query);
+            }
+            
+
+
             return Ok(result);
         }
 
@@ -89,6 +132,6 @@ namespace dev_study_catelogue_api.Controllers
             var response = await Mediator.Send(command);
             return Ok(response);
         }
-
+       
     }
 }

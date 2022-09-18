@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.Courses.Commands.UpdateCourse;
+using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,7 @@ namespace Application.Common.Mappings
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
             //TODO: add mapping configs here
+            CreateMap<UpdateCourseCommand,Course>();
 
             var mapFromType = typeof(IMapFrom<>);
 

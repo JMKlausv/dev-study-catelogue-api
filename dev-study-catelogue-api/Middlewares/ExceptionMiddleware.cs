@@ -52,16 +52,15 @@ namespace dev_study_catelogue_api.Middlewares
                 {
                     var values = ex.Errors.Values.First();
                     var msg = String.Join(" , ", values);
-                    message = exception.Message +"::"+ msg;
+                    message = ex.Message +"::"+ msg;
                 }
                
             }
-            
 
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = exception.InnerException!.Message
+                Message = exception.Message
             }.ToString()) ;
         }
     }
