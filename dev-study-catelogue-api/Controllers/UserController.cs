@@ -41,7 +41,8 @@ namespace dev_study_catelogue_api.Controllers
         public async Task<IActionResult> create([FromBody] CreateUserCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            var resObject = new { Id = result };
+            return Ok(resObject);
         }
 
         /*

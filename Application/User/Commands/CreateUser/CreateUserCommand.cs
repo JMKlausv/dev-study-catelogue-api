@@ -36,6 +36,7 @@ namespace Application.User.Commands.CreateUser
              
                   throw new CantCreateUserException(string.Join(",", response.result.Errors));
               }
+       
               return response.userId;
             
             

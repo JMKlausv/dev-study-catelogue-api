@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 using System.IdentityModel.Tokens.Jwt;
@@ -17,11 +18,13 @@ namespace Infrastructure.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<IdentityService> _logger;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public IdentityService(UserManager<ApplicationUser> userManager, IConfiguration configuration , ILogger<IdentityService> logger)
         {
             _userManager = userManager;
             _configuration = configuration;
+           _logger = logger;
         }
         public async Task<(Result result, string tokenString)> AuthenticateUserAsync(string userName,string email, string password)
         {
@@ -75,7 +78,15 @@ namespace Infrastructure.Identity
             };
 
             var result = await _userManager.CreateAsync(user, password);
-            await _userManager.AddToRoleAsync(user, "user");
+            _logger.LogCritical("this is result........"+result.ToString());
+            if (!result.Succeeded)
+            {
+                return (Result.Failure(new string[] { result.ToString() }), string.Empty);
+            }
+           var addRoleResult =  await _userManager.AddToRoleAsync(user, "user");
+            _logger.LogWarning(addRoleResult.ToString());
+
+        
             return (result.ToApplicationResult(), user.Id);
         }
 
