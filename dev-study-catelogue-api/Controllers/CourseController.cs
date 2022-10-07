@@ -21,7 +21,7 @@ namespace dev_study_catelogue_api.Controllers
 
         // GET: api/<CourseController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string? frameworkId , [FromQuery] string? difficulty , [FromQuery] string? maxCount , [FromQuery] string? UploadedByUser , [FromQuery] string? userDivision)
+        public async Task<IActionResult> Get( [FromQuery] string? orderBy,[FromQuery] string? frameworkId , [FromQuery] string? difficulty , [FromQuery] string? maxCount , [FromQuery] string? UploadedByUser , [FromQuery] string? userDivision)
         {
             System.Diagnostics.Debug.WriteLine(UploadedByUser);
             if (frameworkId != null)
@@ -57,7 +57,8 @@ namespace dev_study_catelogue_api.Controllers
               
                 MaxCount = maxCount != null ? int.Parse(maxCount) : null,
                 UploadedByUser =UploadedByUser,
-                UserDivision = userDivision 
+                UserDivision = userDivision ,
+                OrderBy = orderBy
 
             };
             var result =  await Mediator.Send(queryDefault);

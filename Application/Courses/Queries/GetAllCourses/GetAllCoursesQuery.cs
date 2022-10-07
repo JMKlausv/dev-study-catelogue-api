@@ -11,6 +11,7 @@ namespace Application.Courses.Queries.GetAllCourses
         public int? MaxCount { get; set; }
         public string? UploadedByUser { get; set; }
         public string? UserDivision { get; set; }
+        public string? OrderBy { get; set; }
     }
     public class GetAllCoursesQueryHandler : IRequestHandler<GetAllCoursesQuery, IEnumerable<CourseDto>>
     {
@@ -72,11 +73,17 @@ namespace Application.Courses.Queries.GetAllCourses
                 }
 
             }
-            
+            if(request.OrderBy != null)
+            {
+                course.reorder(request.OrderBy);
+            }
            var course1 = request.MaxCount!=null? course.Take((int)request.MaxCount):course;
             return course1;
 
 
         }
+
+       
     }
+    
 }
