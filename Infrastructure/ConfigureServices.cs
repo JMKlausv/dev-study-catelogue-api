@@ -24,7 +24,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder=>builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
             });
 
-
+            services.AddTransient<IIdentityService, IdentityService>();
+           
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
             services.AddScoped<AppDbContextInitializer>();
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -36,10 +37,6 @@ namespace Microsoft.Extensions.DependencyInjection
             })
              .AddEntityFrameworkStores<AppDbContext>()
              .AddDefaultTokenProviders();
-
-            services.AddTransient<IIdentityService, IdentityService>();
-
-
             services.AddAuthentication(ops =>
             {
                 ops.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -1,5 +1,6 @@
 ﻿using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.CreateUser;
+using Application.User.Commands.UpdateUserLikes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,7 @@ namespace dev_study_catelogue_api.Controllers
         public async Task<IActionResult> authenticate([FromBody] AuthenticateUserCommand command)
         {
             var result = await  Mediator.Send(command);
+            Console.WriteLine(result);  
             return Ok(result);
         }
 
@@ -45,14 +47,16 @@ namespace dev_study_catelogue_api.Controllers
             return Ok(resObject);
         }
 
-        /*
-
           // PUT api/<UserController>/5
-          [HttpPut("{id}")]
-          public void Put(int id, [FromBody] string value)
+          [HttpPut]
+          [Route("updateLikes")]
+          public async Task<IActionResult> Put( [FromBody] UpdateUserLikesCommand command)
           {
+            var result = await Mediator.Send(command);
+            var resObject = new {UserId = result};
+            return Ok(resObject);
           }
-        */
+   
         /*
 
         // DELETE api/<UserController>/5

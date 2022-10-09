@@ -49,8 +49,10 @@ namespace dev_study_catelogue_api.Middlewares
                 ex = exception as ValidationException;
 
              if(ex!= null)
-                {
-                    var values = ex.Errors.Values.First();
+                { 
+                    var values = ex.Errors?.Values?.First();
+
+                    values = values == null?Array.Empty<string>() : values;
                     var msg = String.Join(" , ", values);
                     message = ex.Message +"::"+ msg;
                 }
@@ -60,7 +62,7 @@ namespace dev_study_catelogue_api.Middlewares
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = exception.Message
+                Message =message,    
             }.ToString()) ;
         }
     }

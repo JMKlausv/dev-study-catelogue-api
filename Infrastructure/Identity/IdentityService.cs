@@ -14,6 +14,9 @@ using System.Text;
 
 namespace Infrastructure.Identity
 {
+
+
+
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -26,36 +29,76 @@ namespace Infrastructure.Identity
             _configuration = configuration;
            _logger = logger;
         }
-        public async Task<(Result result, string tokenString)> AuthenticateUserAsync(string userName,string email, string password)
+        public async Task<LoginResponse> AuthenticateUserAsync(string userName, string email, string password)
         {
             ApplicationUser user;
-            if (userName != null && !userName.Equals("") )
+            if (userName != null && !userName.Equals(""))
             {
                 user = await _userManager.FindByNameAsync(userName);
-            }else {
+            }
+            else
+            {
                 user = await _userManager.FindByEmailAsync(email);
             }
-            
+
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
 
                 var tokenString = await generateToken(user);
-                return (Result.Success(), tokenString);
+                var response = new LoginResponse()
+                {
+                    Result = Result.Success(),
+                    TokenString = tokenString,
+                    LikedCoursses = user.LikedCourses,
+                    DislikedCourses = user.DislikedCourses,
+                };
+                _logger.LogCritical(response.TokenString);
 
+                return response;
+
+                //  return tokenString; 
 
             }
             string[] errors = new string[] { "Invalid login" };
-            return (Result.Failure(errors), string.Empty);
-
-
+            var response2 = new LoginResponse()
+            {
+                Result = Result.Success(),
+                TokenString = String.Empty,
+                LikedCoursses = Array.Empty<int>(),
+                DislikedCourses = Array.Empty<int>(),
+            };
+            return response2;
         }
 
-
-        public async Task<string> GetUserNameAsync(string userId)
+            public async Task<string> GetUserNameAsync(string userId)
         {
             var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
 
             return user.UserName;
+        }
+
+        public async Task<int> updateUserLikes(string userId , int[] likedCourses)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if(user == null)
+            {
+                return -1;
+               
+            }
+            user.LikedCourses = likedCourses;
+            await _userManager.UpdateAsync(user);
+            return 1;
+        }
+        public async Task<int> updateUserDislikes(string userId, int[] dislikedCourses)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return -1;
+            }
+            user.DislikedCourses = dislikedCourses;
+            await _userManager.UpdateAsync(user);
+            return 1;    
         }
 
         public async Task<(Result result, string userId)> CreateUserAsync(string userName,string email, string password)
@@ -71,10 +114,13 @@ namespace Infrastructure.Identity
             {
                 return (Result.Failure(new string[] { "Email already in use" }), string.Empty);
             }
+            int[] arr = { 8};
             var user = new ApplicationUser
             {
                 Email = email,
-                UserName = userName
+                UserName = userName,
+                LikedCourses = arr,
+                DislikedCourses = Array.Empty<int>()
             };
 
             var result = await _userManager.CreateAsync(user, password);
@@ -104,7 +150,7 @@ namespace Infrastructure.Identity
 
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                new Claim(ClaimTypes.Email, user.Email),
-               new Claim(ClaimTypes.Name,user.UserName)
+               new Claim(ClaimTypes.Name,user.UserName), 
            };
             foreach (var userRole in userRoles)
             {

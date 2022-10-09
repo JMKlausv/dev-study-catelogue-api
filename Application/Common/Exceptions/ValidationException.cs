@@ -9,7 +9,10 @@ namespace Application.Common.Exceptions
         {
             Errors = new Dictionary<string, string[]>();
         }
+        public ValidationException(string message) : base(message)
+        {
 
+        }
         public ValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {

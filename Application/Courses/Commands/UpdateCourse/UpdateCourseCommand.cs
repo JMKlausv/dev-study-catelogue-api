@@ -22,6 +22,8 @@ namespace Application.Courses.Commands.UpdateCourse
         public string PlatformType { get; init; }
         public string UploadedBy { get; init; }
         public string Division { get; init; }
+        public int? UpvoteCount { get; init; }
+        public int? DownVoteCount {  get; init; }
     }
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, int>
     {

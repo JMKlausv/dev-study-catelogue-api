@@ -1,19 +1,20 @@
 ﻿using Application.common.Exceptions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
 
 
 namespace Application.User.Commands.AuthenticateUser
 {
-    public  class AuthenticateUserCommand : IRequest<string>
+    public  class AuthenticateUserCommand : IRequest<Object>
     {
         public string? email { get; init; }
         public string? userName { get; init; }   
         public string password { get; init; }
 
 }
-public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, string>
+public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand,Object >
 {
     private readonly IIdentityService _identityService;
 
@@ -22,16 +23,23 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
         _identityService = identityService;
     }
 
-    public async Task<string> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Object> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
 
         var response = await _identityService.AuthenticateUserAsync(request.userName,request.email, request.password);
-        if (!response.result.Succeeded)
+      
+            if (!response.Result.Succeeded)
         {
 
-            throw new AuthenticationException(string.Join(",", response.result.Errors));
+            throw new AuthenticationException(string.Join(",", response.Result.Errors));
         }
-        return response.tokenString;
+     
+        return new
+        {
+            tokenString=response.TokenString,
+            likedCourses = response.LikedCoursses,
+            dislikedCourses =response.DislikedCourses
+        };
 
 
 
