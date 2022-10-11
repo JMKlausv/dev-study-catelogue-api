@@ -10,7 +10,7 @@ namespace Application.Common.Models
     {
         public Result Result { get; set; }
         public string TokenString { get; set; }
-        public int[] LikedCoursses { get; set; }
-        public int[] DislikedCourses { get; set; }
+        public string LikedCoursses { get; set; }
+        public string DislikedCourses { get; set; }
     }
 }

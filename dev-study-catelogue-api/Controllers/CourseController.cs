@@ -1,5 +1,6 @@
 ﻿using Application.Courses.Commands.CreateCourse;
 using Application.Courses.Commands.DeleteCourse;
+using Application.Courses.Commands.PatchCourse;
 using Application.Courses.Commands.UpdateCourse;
 using Application.Courses.Queries.GetAllCourses;
 using Application.Courses.Queries.GetAllCoursesCount;
@@ -7,7 +8,9 @@ using Application.Courses.Queries.GetCourseByDifficulty;
 using Application.Courses.Queries.GetCourseByFrameworkId;
 using Application.Courses.Queries.GetCourseById;
 using Application.Courses.Queries.GetUserCourseCount;
+using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -132,6 +135,23 @@ namespace dev_study_catelogue_api.Controllers
             };
             var response = await Mediator.Send(command);
             return Ok(response);
+        }
+
+        //PATCH api/<CourseController>/5
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> patch(int id, JsonPatchDocument<Course> patchDoc)
+        {
+            var command = new PatchCourseCommand
+            {
+                Id = id,
+                coursePatch = patchDoc
+
+            };
+            var result = await Mediator.Send(command);
+            
+            var resObject = new { courseId = result };
+            return Ok(resObject);
+
         }
        
     }

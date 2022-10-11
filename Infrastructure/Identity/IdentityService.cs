@@ -49,8 +49,8 @@ namespace Infrastructure.Identity
                 {
                     Result = Result.Success(),
                     TokenString = tokenString,
-                    LikedCoursses = user.LikedCourses,
-                    DislikedCourses = user.DislikedCourses,
+                    LikedCoursses = user.LikedCoursesId,
+                    DislikedCourses = user.DislikedCoursesId,
                 };
                 _logger.LogCritical(response.TokenString);
 
@@ -64,8 +64,8 @@ namespace Infrastructure.Identity
             {
                 Result = Result.Success(),
                 TokenString = String.Empty,
-                LikedCoursses = Array.Empty<int>(),
-                DislikedCourses = Array.Empty<int>(),
+                LikedCoursses = String.Empty,
+                DislikedCourses = String.Empty,
             };
             return response2;
         }
