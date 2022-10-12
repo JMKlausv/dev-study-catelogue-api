@@ -1,6 +1,7 @@
 ﻿using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.CreateUser;
 using Application.User.Commands.UpdateUserLikes;
+using Application.User.Queries.GetUserPreferences;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dev_study_catelogue_api.Controllers
 {
-   
+   public record userResource
+    {
+        public string Id { get; set; }  
+    }
     public class UserController : ApiControllerBase
     {
     /*
@@ -19,14 +23,21 @@ namespace dev_study_catelogue_api.Controllers
             return new string[] { "value1", "value2" };
         }
     */
-    /*
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+    
+        // GET api/<UserController>/userPreference/
+        [HttpGet()]
+        [Route("userPreference/{id}")]
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
+            var command = new GetUserPreferencesQuery
+            {
+                UserId = id,   
+            };
+            var response = await Mediator.Send(command);
+            return Ok(response);
+
         }
-    */
+    
 
         // POST api/<UserController>
         [HttpPost]

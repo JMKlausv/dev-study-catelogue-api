@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -141,6 +142,18 @@ namespace Infrastructure.Identity
             var admins = await _userManager.GetUsersInRoleAsync("admin");
             return admins.First().Id;
         }
+
+        public async Task<UserPreference> GetUserPreferences(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                throw new NotFoundException("User", new { Id = userId });
+            }
+            return new UserPreference { LikedCourses = user.LikedCourses, DislikedCourses = user.DislikedCourses, };
+        }
+
+
         private async Task<string> generateToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
